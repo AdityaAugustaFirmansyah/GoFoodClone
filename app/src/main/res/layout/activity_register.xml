@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".auth.register.ui.RegisterActivity">
 
+    <include layout="@layout/register_step_1" android:id="@+id/register_step_1"/>
+    <include layout="@layout/register_step_2" android:id="@+id/register_step_2"/>
+    <include layout="@layout/layout_loading" android:id="@+id/loading"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
