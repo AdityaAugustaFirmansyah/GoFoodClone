@@ -69,7 +69,7 @@ Then the app should display the home screen
 
 
 ## Flowchart
-![flowchart](https://raw.githubusercontent.com/AdityaAugustaFirmansyah/GoFoodClone/master/LoginFlowchart.png)
+![flowchart](https://raw.githubusercontent.com/AdityaAugustaFirmansyah/GoFoodClone/master/LoginFlowchartRevisi.png)
 
 ## Model Specs
 
