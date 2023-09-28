@@ -1,28 +1,28 @@
 package com.example.gofoodclone.auth.register.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.gofoodclone.MyApplication
 import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.PayloadAuth
 import com.example.gofoodclone.auth.domain.SaveSession
 import com.example.gofoodclone.auth.login.ui.BaseObserverLiveData
 import com.example.gofoodclone.auth.register.CityDummy
+import com.example.gofoodclone.auth.register.domain.RegisterPayload
 import com.example.gofoodclone.auth.register.http.RegisterService
 import com.example.gofoodclone.auth.register.http.usecase.RemoteRegister
 import com.example.gofoodclone.auth.register.persentation.RegisterViewModel
 import com.example.gofoodclone.auth.register.persentation.RegisterViewModelFactory
+import com.example.gofoodclone.auth.session.SessionDao
 import com.example.gofoodclone.databinding.ActivityRegisterBinding
 import com.example.gofoodclone.dialog.DialogView
 import com.example.gofoodclone.framework.HttpFactory
 import com.example.gofoodclone.framework.TinyDB
 import com.example.gofoodclone.home.MainActivity
-import retrofit2.create
 
 class RegisterActivity : AppCompatActivity() {
     private var city: String = ""
@@ -30,12 +30,13 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
+        val app = application as MyApplication
         setContentView(registerBinding.root)
         val viewModel = ViewModelProvider(
             this, RegisterViewModelFactory(
                 RemoteRegister(
                     HttpFactory.createRetrofit().create(RegisterService::class.java),
-                    SaveSession(TinyDB(this))
+                    SaveSession(SessionDao(app.tinyDB))
                 )
             )
         )[RegisterViewModel::class.java]
@@ -82,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
         }
         registerBinding.registerStep2.button3.setOnClickListener {
             viewModel.register(
-                PayloadAuth(
+                RegisterPayload(
                     name = registerBinding.registerStep1.editTextText.text.toString(),
                     email = registerBinding.registerStep1.editTextText2.text.toString(),
                     password = registerBinding.registerStep1.editTextTextPassword2.text.toString(),
@@ -96,7 +97,7 @@ class RegisterActivity : AppCompatActivity() {
         }
         registerBinding.registerStep1.button3.setOnClickListener {
             viewModel.onNextPage(
-                PayloadAuth(
+                RegisterPayload(
                     name = registerBinding.registerStep1.editTextText.text.toString(),
                     email = registerBinding.registerStep1.editTextText2.text.toString(),
                     password = registerBinding.registerStep1.editTextTextPassword2.text.toString()

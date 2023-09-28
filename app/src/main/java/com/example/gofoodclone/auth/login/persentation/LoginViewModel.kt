@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.gofoodclone.auth.domain.BaseDomain
 import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.LoginLoader
-import com.example.gofoodclone.auth.domain.PayloadAuth
-import com.example.gofoodclone.auth.domain.User
+import com.example.gofoodclone.auth.login.domain.LoginLoader
+import com.example.gofoodclone.auth.login.domain.LoginPayload
 import com.example.gofoodclone.auth.login.http.usecase.Connectivity
 import com.example.gofoodclone.auth.login.http.usecase.InvalidData
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 enum class StateView {
     LOADING,
@@ -42,7 +40,7 @@ data class BaseUiState<out T>(
 
 class LoginViewModel(private val loginLoader: LoginLoader) : ViewModel() {
     val viewModelState = MutableLiveData<BaseUiState<DataAuth>>()
-    fun doLogin(payloadAuth: PayloadAuth) {
+    fun doLogin(payloadAuth: LoginPayload) {
 
         if (payloadAuth.email.isEmpty()) {
             viewModelState.value = BaseUiState.createInstanceFailed("Email Wajib Di Isi")

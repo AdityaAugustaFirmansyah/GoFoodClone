@@ -1,21 +1,20 @@
-package com.example.gofoodclone.auth.local.usecase
+package com.example.gofoodclone.auth.session.usecase
 
 import com.example.gofoodclone.auth.domain.BaseDomain
 import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.LoginLoader
-import com.example.gofoodclone.auth.domain.PayloadAuth
-import com.example.gofoodclone.framework.TinyDB
+import com.example.gofoodclone.auth.session.SessionDao
+import com.example.gofoodclone.auth.session.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class LocalLogin(val tinyDB: TinyDB){
+class SessionLocal(val tinyDB: SessionDao){
     fun check(): Flow<BaseDomain<DataAuth?>> {
         return flow {
-            val data = tinyDB.getObject("user",DataAuth::class.java)
+            val data = tinyDB.getSession()
             if (data==null){
                 emit(BaseDomain.Failure(Exception("Invalid Token")))
             }else{
-                emit(BaseDomain.Success(data))
+                emit(BaseDomain.Success(data.toDomain()))
             }
         }
     }

@@ -6,18 +6,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.gofoodclone.auth.domain.BaseDomain
 import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.LoginLoader
-import com.example.gofoodclone.auth.domain.PayloadAuth
+import com.example.gofoodclone.auth.login.domain.LoginLoader
 import com.example.gofoodclone.auth.login.http.usecase.Connectivity
 import com.example.gofoodclone.auth.login.http.usecase.InvalidData
 import com.example.gofoodclone.auth.login.persentation.BaseUiState
-import kotlinx.coroutines.flow.collect
+import com.example.gofoodclone.auth.register.domain.RegisterLoader
+import com.example.gofoodclone.auth.register.domain.RegisterPayload
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(val loginLoader: LoginLoader) : ViewModel() {
+class RegisterViewModel(val registerLoader: RegisterLoader) : ViewModel() {
     val onRegister = MutableLiveData<BaseUiState<DataAuth>>()
     val onPage = MutableLiveData<Int>(1)
-    fun register(payloadAuth: PayloadAuth){
+    fun register(payloadAuth: RegisterPayload){
         onRegister.value = BaseUiState.createInstanceLoading()
         viewModelScope.launch {
             if (payloadAuth.phoneNumber.isNullOrEmpty()) {
@@ -29,7 +29,7 @@ class RegisterViewModel(val loginLoader: LoginLoader) : ViewModel() {
             }else if (payloadAuth.city.isNullOrEmpty()){
                 onRegister.value = BaseUiState.createInstanceFailed("Kota Wajib Di Isi")
             }else{
-                loginLoader.login(payloadAuth).collect{ result->
+                registerLoader.login(payloadAuth).collect{ result->
                     when (result) {
                         is BaseDomain.Success -> onRegister.value =
                             BaseUiState.createInstanceSuccess(result.data)
@@ -47,7 +47,7 @@ class RegisterViewModel(val loginLoader: LoginLoader) : ViewModel() {
             }
         }
     }
-    fun onNextPage(payloadAuth: PayloadAuth){
+    fun onNextPage(payloadAuth: RegisterPayload){
         if (payloadAuth.name.isNullOrEmpty()) {
             onRegister.value = BaseUiState.createInstanceFailed("Nama Wajib Di Isi")
         } else if (payloadAuth.email.isEmpty()) {
@@ -63,8 +63,8 @@ class RegisterViewModel(val loginLoader: LoginLoader) : ViewModel() {
     }
 }
 
-class RegisterViewModelFactory(val loginLoader: LoginLoader):ViewModelProvider.Factory{
+class RegisterViewModelFactory(val registerLoader: RegisterLoader):ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RegisterViewModel(loginLoader) as T
+        return RegisterViewModel(registerLoader) as T
     }
 }

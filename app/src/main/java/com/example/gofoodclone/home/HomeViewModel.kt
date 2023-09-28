@@ -6,15 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.gofoodclone.auth.domain.BaseDomain
 import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.LoginLoader
-import com.example.gofoodclone.auth.local.usecase.LocalLogin
-import com.example.gofoodclone.auth.login.http.usecase.Connectivity
-import com.example.gofoodclone.auth.login.http.usecase.InvalidData
+import com.example.gofoodclone.auth.session.usecase.SessionLocal
 import com.example.gofoodclone.auth.login.persentation.BaseUiState
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class HomeViewModel(localLogin: LocalLogin) : ViewModel() {
+class HomeViewModel(localLogin: SessionLocal) : ViewModel() {
     val onCheckLogin = MutableLiveData<BaseUiState<DataAuth>>()
     init {
         viewModelScope.launch {
@@ -31,7 +27,7 @@ class HomeViewModel(localLogin: LocalLogin) : ViewModel() {
     }
 }
 
-class HomeViewModelFactory(val localLogin: LocalLogin):ViewModelProvider.Factory{
+class HomeViewModelFactory(val localLogin: SessionLocal):ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return HomeViewModel(localLogin) as T
     }
