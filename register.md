@@ -111,4 +111,4 @@ Then the app should display home screen
 | `profile_photo_url`  | `Long`   |
 
 ## Depedency Diagram
-![flowchart](https://github.com/AdityaAugustaFirmansyah/GoFoodClone/blob/master/foodapp-Register%20Depedency%20Diagram.png?raw=true)
+![flowchart](https://github.com/AdityaAugustaFirmansyah/GoFoodClone/blob/master/RegisterDependecyDiagram.png)
