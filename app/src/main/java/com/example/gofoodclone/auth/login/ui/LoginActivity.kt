@@ -6,15 +6,10 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.example.gofoodclone.MyApplication
 import com.example.gofoodclone.auth.register.ui.RegisterActivity
-import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.login.domain.LoginPayload
-import com.example.gofoodclone.auth.login.http.LoginService
-import com.example.gofoodclone.framework.HttpFactory
-import com.example.gofoodclone.auth.login.http.usecase.RemoteLogin
-import com.example.gofoodclone.auth.domain.SaveSession
-import com.example.gofoodclone.auth.login.persentation.LoginViewModel
-import com.example.gofoodclone.auth.login.persentation.LoginViewModelFactory
-import com.example.gofoodclone.auth.session.SessionDao
+import com.example.domain.DataAuth
+import com.example.domain.login.LoginPayload
+import com.example.persentation.LoginViewModel
+import com.example.persentation.LoginViewModelFactory
 import com.example.gofoodclone.databinding.ActivityLoginBinding
 import com.example.gofoodclone.dialog.DialogView
 import com.example.gofoodclone.factories.LoginDecorator
@@ -25,7 +20,7 @@ import com.example.gofoodclone.factories.SessionDaoFactory
 import com.example.gofoodclone.home.MainActivity
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var viewModel: LoginViewModel
+    lateinit var viewModel: com.example.persentation.LoginViewModel
     lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
         val app = application as MyApplication
         viewModel = ViewModelProvider(
             this,
-            LoginViewModelFactory(
+            com.example.persentation.LoginViewModelFactory(
                 LoginDecorator.createFactory(
                     RemoteLoginFactory.createRemoteLoginFactory(
                         LoginServiceFactory.createLoginService()
@@ -44,10 +39,10 @@ class LoginActivity : AppCompatActivity() {
                     )
                 )
             )
-        )[LoginViewModel::class.java]
+        )[com.example.persentation.LoginViewModel::class.java]
         viewModel.viewModelState.observe(this,
-            object : BaseObserverLiveData<DataAuth>(binding.loading) {
-                override fun onSuccess(data: DataAuth) {
+            object : BaseObserverLiveData<com.example.domain.DataAuth>(binding.loading) {
+                override fun onSuccess(data: com.example.domain.DataAuth) {
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
@@ -60,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
             })
         binding.button.setOnClickListener {
-            val payloadAuth = LoginPayload(
+            val payloadAuth = com.example.domain.login.LoginPayload(
                 email = binding.editText.text.toString(),
                 binding.editTextTextPassword.text.toString()
             )

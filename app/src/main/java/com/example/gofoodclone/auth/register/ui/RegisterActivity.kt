@@ -8,16 +8,12 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.gofoodclone.MyApplication
-import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.SaveSession
+import com.example.domain.DataAuth
 import com.example.gofoodclone.auth.login.ui.BaseObserverLiveData
 import com.example.gofoodclone.auth.register.CityDummy
-import com.example.gofoodclone.auth.register.domain.RegisterPayload
-import com.example.gofoodclone.auth.register.http.RegisterService
-import com.example.gofoodclone.auth.register.http.usecase.RemoteRegister
-import com.example.gofoodclone.auth.register.persentation.RegisterViewModel
-import com.example.gofoodclone.auth.register.persentation.RegisterViewModelFactory
-import com.example.gofoodclone.auth.session.SessionDao
+import com.example.domain.register.RegisterPayload
+import com.example.persentation.RegisterViewModel
+import com.example.persentation.RegisterViewModelFactory
 import com.example.gofoodclone.databinding.ActivityRegisterBinding
 import com.example.gofoodclone.dialog.DialogView
 import com.example.gofoodclone.factories.RegisterDecorator
@@ -25,8 +21,6 @@ import com.example.gofoodclone.factories.RegisterServiceFactory
 import com.example.gofoodclone.factories.RemoteRegisterFactory
 import com.example.gofoodclone.factories.SaveSessionFactory
 import com.example.gofoodclone.factories.SessionDaoFactory
-import com.example.gofoodclone.framework.HttpFactory
-import com.example.gofoodclone.framework.TinyDB
 import com.example.gofoodclone.home.MainActivity
 
 class RegisterActivity : AppCompatActivity() {
@@ -38,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
         val app = application as MyApplication
         setContentView(registerBinding.root)
         val viewModel = ViewModelProvider(
-            this, RegisterViewModelFactory(
+            this, com.example.persentation.RegisterViewModelFactory(
                 RegisterDecorator.createFactory(
                     RemoteRegisterFactory.createRemoteLoginFactory(
                         RegisterServiceFactory.createLoginService()
@@ -48,7 +42,7 @@ class RegisterActivity : AppCompatActivity() {
                     )
                 )
             )
-        )[RegisterViewModel::class.java]
+        )[com.example.persentation.RegisterViewModel::class.java]
         viewModel.onPage.observe(this) {
             if (it == 1) {
                 registerBinding.registerStep1.root.visibility = View.VISIBLE
@@ -60,8 +54,8 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         viewModel.onRegister.observe(this,
-            object : BaseObserverLiveData<DataAuth>(registerBinding.loading) {
-                override fun onSuccess(data: DataAuth) {
+            object : BaseObserverLiveData<com.example.domain.DataAuth>(registerBinding.loading) {
+                override fun onSuccess(data: com.example.domain.DataAuth) {
                     startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
                     finish()
                 }
@@ -93,7 +87,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         registerBinding.registerStep2.button3.setOnClickListener {
             viewModel.register(
-                RegisterPayload(
+                com.example.domain.register.RegisterPayload(
                     name = registerBinding.registerStep1.editTextText.text.toString(),
                     email = registerBinding.registerStep1.editTextText2.text.toString(),
                     password = registerBinding.registerStep1.editTextTextPassword2.text.toString(),
@@ -107,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
         }
         registerBinding.registerStep1.button3.setOnClickListener {
             viewModel.onNextPage(
-                RegisterPayload(
+                com.example.domain.register.RegisterPayload(
                     name = registerBinding.registerStep1.editTextText.text.toString(),
                     email = registerBinding.registerStep1.editTextText2.text.toString(),
                     password = registerBinding.registerStep1.editTextTextPassword2.text.toString()

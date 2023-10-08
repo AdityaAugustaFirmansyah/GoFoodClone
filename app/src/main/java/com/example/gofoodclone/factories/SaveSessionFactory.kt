@@ -1,11 +1,12 @@
 package com.example.gofoodclone.factories
 
-import com.example.gofoodclone.auth.domain.SaveSession
-import com.example.gofoodclone.auth.session.SessionDao
+
+import com.example.session.SaveSession
+import com.example.session.SessionDao
 
 class SaveSessionFactory {
     companion object{
-        fun createSaveSession(dao: SessionDao):SaveSession{
+        fun createSaveSession(dao: com.example.session.SessionDao): SaveSession {
             return SaveSession(dao)
         }
     }

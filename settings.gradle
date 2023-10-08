@@ -14,3 +14,9 @@ dependencyResolutionManagement {
 }
 rootProject.name = "GoFoodClone"
 include ':app'
+include ':auth:domain'
+include ':auth:session'
+include ':auth:register:persentation'
+include ':auth:register:remote'
+include ':auth:login:persentation'
+include ':auth:login:remote'

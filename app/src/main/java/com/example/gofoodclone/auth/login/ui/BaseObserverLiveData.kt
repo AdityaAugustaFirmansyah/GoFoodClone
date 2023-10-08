@@ -2,8 +2,8 @@ package com.example.gofoodclone.auth.login.ui
 
 import android.view.View
 import androidx.lifecycle.Observer
-import com.example.gofoodclone.auth.login.persentation.BaseUiState
-import com.example.gofoodclone.auth.login.persentation.StateView
+import com.example.domain.BaseUiState
+import com.example.domain.StateView
 import com.example.gofoodclone.databinding.LayoutLoadingBinding
 
 abstract class BaseObserverLiveData<T> (val loadingBinding: LayoutLoadingBinding) : Observer<BaseUiState<T>>  {
@@ -20,7 +20,7 @@ abstract class BaseObserverLiveData<T> (val loadingBinding: LayoutLoadingBinding
                 if (value.data==null){
                     onFailure("Gagal")
                 }else{
-                    onSuccess(value.data)
+                    onSuccess(value.data!!)
                 }
             }
         }

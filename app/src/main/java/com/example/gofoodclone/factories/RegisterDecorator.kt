@@ -1,23 +1,20 @@
 package com.example.gofoodclone.factories
 
-import com.example.gofoodclone.auth.domain.BaseDomain
-import com.example.gofoodclone.auth.domain.DataAuth
-import com.example.gofoodclone.auth.domain.SaveSession
-import com.example.gofoodclone.auth.domain.toDomain
-import com.example.gofoodclone.auth.login.domain.LoginLoader
-import com.example.gofoodclone.auth.login.domain.LoginPayload
-import com.example.gofoodclone.auth.register.domain.RegisterLoader
-import com.example.gofoodclone.auth.register.domain.RegisterPayload
-import com.example.gofoodclone.auth.session.usecase.SessionLocal
+import com.example.domain.BaseDomain
+import com.example.domain.DataAuth
+
+import com.example.domain.register.RegisterLoader
+import com.example.domain.register.RegisterPayload
+import com.example.session.SaveSession
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 
-class RegisterDecorator(val loginLoader: RegisterLoader, val sessionLocal: SaveSession):RegisterLoader{
-    override fun login(payloadAuth: RegisterPayload): Flow<BaseDomain<DataAuth?>> {
+class RegisterDecorator(val loginLoader: com.example.domain.register.RegisterLoader, val sessionLocal: SaveSession):
+    com.example.domain.register.RegisterLoader {
+    override fun login(payloadAuth: com.example.domain.register.RegisterPayload): Flow<com.example.domain.BaseDomain<com.example.domain.DataAuth?>> {
         return flow {
             loginLoader.login(payloadAuth).collect{ it ->
-                if (it is BaseDomain.Success){
+                if (it is com.example.domain.BaseDomain.Success){
                     val  data = it.data
                     data?.let { sessionLocal.save(it) }
                 }
@@ -25,7 +22,7 @@ class RegisterDecorator(val loginLoader: RegisterLoader, val sessionLocal: SaveS
         }
     }
     companion object{
-        fun createFactory(loginLoader: RegisterLoader,sessionLocal: SaveSession):RegisterLoader{
+        fun createFactory(loginLoader: com.example.domain.register.RegisterLoader, sessionLocal: SaveSession): com.example.domain.register.RegisterLoader {
             return RegisterDecorator(loginLoader, sessionLocal)
         }
     }

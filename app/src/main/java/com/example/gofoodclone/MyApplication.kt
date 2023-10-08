@@ -1,12 +1,12 @@
 package com.example.gofoodclone
 
 import android.app.Application
-import com.example.gofoodclone.framework.TinyDB
+import com.example.session.TinyDB
 
 class MyApplication : Application() {
-    lateinit var tinyDB: TinyDB
+    lateinit var tinyDB: com.example.session.TinyDB
     override fun onCreate() {
         super.onCreate()
-        tinyDB = TinyDB(this)
+        tinyDB = com.example.session.TinyDB(this)
     }
 }

@@ -11,6 +11,15 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/auth" />
+            <option value="$PROJECT_DIR$/auth/domain" />
+            <option value="$PROJECT_DIR$/auth/login" />
+            <option value="$PROJECT_DIR$/auth/login/persentation" />
+            <option value="$PROJECT_DIR$/auth/login/remote" />
+            <option value="$PROJECT_DIR$/auth/register" />
+            <option value="$PROJECT_DIR$/auth/register/persentation" />
+            <option value="$PROJECT_DIR$/auth/register/remote" />
+            <option value="$PROJECT_DIR$/auth/session" />
           </set>
         </option>
       </GradleProjectSettings>

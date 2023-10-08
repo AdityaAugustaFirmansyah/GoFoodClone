@@ -1,12 +1,12 @@
 package com.example.gofoodclone.factories
 
-import com.example.gofoodclone.auth.session.SessionDao
-import com.example.gofoodclone.framework.TinyDB
+import com.example.session.SessionDao
+import com.example.session.TinyDB
 
 class SessionDaoFactory {
     companion object{
-        fun createSessionDaoFactory(tinyDB: TinyDB):SessionDao{
-            return SessionDao(tinyDB)
+        fun createSessionDaoFactory(tinyDB: com.example.session.TinyDB): com.example.session.SessionDao {
+            return com.example.session.SessionDao(tinyDB)
         }
     }
 }

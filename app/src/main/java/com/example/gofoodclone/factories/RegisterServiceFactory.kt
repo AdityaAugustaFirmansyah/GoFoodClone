@@ -1,13 +1,12 @@
 package com.example.gofoodclone.factories
 
-import com.example.gofoodclone.auth.login.http.LoginService
-import com.example.gofoodclone.auth.register.http.RegisterService
+import com.example.remote.RegisterService
 import com.example.gofoodclone.framework.HttpFactory
 
 class RegisterServiceFactory {
     companion object{
-        fun createLoginService():RegisterService{
-            return HttpFactory.createRetrofit().create(RegisterService::class.java)
+        fun createLoginService(): com.example.remote.RegisterService {
+            return HttpFactory.createRetrofit().create(com.example.remote.RegisterService::class.java)
         }
     }
 }

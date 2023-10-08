@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.gofoodclone'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.gofoodclone"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -37,6 +37,12 @@ android {
 
 dependencies {
 
+    implementation project(path: ':auth:login:persentation')
+    implementation project(path: ':auth:domain')
+    implementation project(path: ':auth:session')
+    implementation project(path: ':auth:login:remote')
+    implementation project(path: ':auth:register:remote')
+    implementation project(path: ':auth:register:persentation')
     def lifecycle_version = "2.6.2"
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'com.google.code.gson:gson:2.10.1'

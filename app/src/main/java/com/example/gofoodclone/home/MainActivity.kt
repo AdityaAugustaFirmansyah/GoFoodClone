@@ -6,10 +6,9 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.example.gofoodclone.MyApplication
 import com.example.gofoodclone.R
-import com.example.gofoodclone.auth.session.usecase.SessionLocal
+import com.example.session.usecase.SessionLocal
 import com.example.gofoodclone.auth.login.ui.LoginActivity
-import com.example.gofoodclone.auth.session.SessionDao
-import com.example.gofoodclone.framework.TinyDB
+import com.example.session.SessionDao
 
 class MainActivity : AppCompatActivity() {
     lateinit var homeViewModel: HomeViewModel
