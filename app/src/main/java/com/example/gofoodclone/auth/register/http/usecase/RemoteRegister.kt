@@ -14,14 +14,13 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 
-class RemoteRegister(val registerService: RegisterService, val saveSession: SaveSession) :
+class RemoteRegister(val registerService: RegisterService) :
     RegisterLoader {
     override fun login(payloadAuth: RegisterPayload): Flow<BaseDomain<DataAuth?>> {
         return flow {
             try {
                 val data = registerService.register(payloadAuth)
                 emit(BaseDomain.Success(data.data?.toDomain()))
-                data.data?.let { saveSession.save(it.toDomain()) }
             } catch (t: Throwable) {
                 when (t) {
                     is IOException -> {

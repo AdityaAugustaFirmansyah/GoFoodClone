@@ -20,6 +20,11 @@ import com.example.gofoodclone.auth.register.persentation.RegisterViewModelFacto
 import com.example.gofoodclone.auth.session.SessionDao
 import com.example.gofoodclone.databinding.ActivityRegisterBinding
 import com.example.gofoodclone.dialog.DialogView
+import com.example.gofoodclone.factories.RegisterDecorator
+import com.example.gofoodclone.factories.RegisterServiceFactory
+import com.example.gofoodclone.factories.RemoteRegisterFactory
+import com.example.gofoodclone.factories.SaveSessionFactory
+import com.example.gofoodclone.factories.SessionDaoFactory
 import com.example.gofoodclone.framework.HttpFactory
 import com.example.gofoodclone.framework.TinyDB
 import com.example.gofoodclone.home.MainActivity
@@ -34,9 +39,13 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(registerBinding.root)
         val viewModel = ViewModelProvider(
             this, RegisterViewModelFactory(
-                RemoteRegister(
-                    HttpFactory.createRetrofit().create(RegisterService::class.java),
-                    SaveSession(SessionDao(app.tinyDB))
+                RegisterDecorator.createFactory(
+                    RemoteRegisterFactory.createRemoteLoginFactory(
+                        RegisterServiceFactory.createLoginService()
+                    ),
+                    SaveSessionFactory.createSaveSession(
+                        SessionDaoFactory.createSessionDaoFactory(app.tinyDB)
+                    )
                 )
             )
         )[RegisterViewModel::class.java]
@@ -71,16 +80,17 @@ class RegisterActivity : AppCompatActivity() {
         )
         registerBinding.registerStep2.spinner.adapter = arrayAdapter
 
-        registerBinding.registerStep2.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                city = arrayAdapter.getItem(p2).toString()
+        registerBinding.registerStep2.spinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    city = arrayAdapter.getItem(p2).toString()
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
-        }
         registerBinding.registerStep2.button3.setOnClickListener {
             viewModel.register(
                 RegisterPayload(

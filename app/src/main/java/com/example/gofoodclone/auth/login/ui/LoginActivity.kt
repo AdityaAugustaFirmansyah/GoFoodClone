@@ -17,6 +17,11 @@ import com.example.gofoodclone.auth.login.persentation.LoginViewModelFactory
 import com.example.gofoodclone.auth.session.SessionDao
 import com.example.gofoodclone.databinding.ActivityLoginBinding
 import com.example.gofoodclone.dialog.DialogView
+import com.example.gofoodclone.factories.LoginDecorator
+import com.example.gofoodclone.factories.LoginServiceFactory
+import com.example.gofoodclone.factories.RemoteLoginFactory
+import com.example.gofoodclone.factories.SaveSessionFactory
+import com.example.gofoodclone.factories.SessionDaoFactory
 import com.example.gofoodclone.home.MainActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -30,27 +35,35 @@ class LoginActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(
             this,
             LoginViewModelFactory(
-                RemoteLogin(
-                    HttpFactory.createRetrofit().create(LoginService::class.java),
-                    SaveSession(SessionDao(app.tinyDB))
+                LoginDecorator.createFactory(
+                    RemoteLoginFactory.createRemoteLoginFactory(
+                        LoginServiceFactory.createLoginService()
+                    ),
+                    SaveSessionFactory.createSaveSession(
+                        SessionDaoFactory.createSessionDaoFactory(app.tinyDB)
+                    )
                 )
             )
         )[LoginViewModel::class.java]
-        viewModel.viewModelState.observe(this,object : BaseObserverLiveData<DataAuth>(binding.loading){
-            override fun onSuccess(data: DataAuth) {
-                startActivity(Intent(this@LoginActivity,MainActivity::class.java))
-                finish()
-            }
-
-            override fun onFailure(msg: String) {
-                DialogView.createDialogError(msg,this@LoginActivity) {
-
+        viewModel.viewModelState.observe(this,
+            object : BaseObserverLiveData<DataAuth>(binding.loading) {
+                override fun onSuccess(data: DataAuth) {
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
                 }
-            }
 
-        })
+                override fun onFailure(msg: String) {
+                    DialogView.createDialogError(msg, this@LoginActivity) {
+
+                    }
+                }
+
+            })
         binding.button.setOnClickListener {
-            val payloadAuth = LoginPayload(email = binding.editText.text.toString(),binding.editTextTextPassword.text.toString())
+            val payloadAuth = LoginPayload(
+                email = binding.editText.text.toString(),
+                binding.editTextTextPassword.text.toString()
+            )
             viewModel.doLogin(payloadAuth)
         }
 
